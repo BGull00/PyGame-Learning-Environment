@@ -230,6 +230,10 @@ class Pixelcopter(PyGameWrapper):
         self.terrain_group = pygame.sprite.Group()
         self._add_terrain(0, self.width * 4)
 
+        # Show score
+        pygame.font.init()
+        self.score_font = pygame.font.Font(None, 28)
+
     def _add_terrain(self, start, end):
         w = int(self.width * 0.1)
         # each block takes up 10 units.
@@ -325,6 +329,10 @@ class Pixelcopter(PyGameWrapper):
         self.player_group.draw(self.screen)
         self.block_group.draw(self.screen)
         self.terrain_group.draw(self.screen)
+
+        # Update score
+        score_text = self.score_font.render(f'Score: {int(self.getScore())}', True, (0, 0, 0))
+        self.screen.blit(score_text, (20, 10))
 
 if __name__ == "__main__":
     import numpy as np

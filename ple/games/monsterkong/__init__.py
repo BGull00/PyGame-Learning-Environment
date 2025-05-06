@@ -70,6 +70,10 @@ class MonsterKong(PyGameWrapper):
         self.wallGroup = self.newGame.wallGroup
         self.ladderGroup = self.newGame.ladderGroup
 
+        # Show score
+        pygame.font.init()
+        self.score_font = pygame.font.Font(None, 28)
+
     def getScore(self):
         return self.newGame.score
 
@@ -94,7 +98,7 @@ class MonsterKong(PyGameWrapper):
         elif len(self.newGame.Enemies) >= 3 and self.fireballTimer == 46:
             self.newGame.CreateFireball(
                 self.newGame.Enemies[2].getPosition(), 2)
-        self.fireballTimer = (self.fireballTimer + 1) % 70
+        self.fireballTimer = (self.fireballTimer + 1) % 125
 
         # Animate the coin
         for coin in self.coinGroup:
@@ -141,7 +145,7 @@ class MonsterKong(PyGameWrapper):
                         # We can make the player jump and set his
                         # currentJumpSpeed
                         self.newGame.Players[0].isJumping = 1
-                        self.newGame.Players[0].currentJumpSpeed = 7
+                        self.newGame.Players[0].currentJumpSpeed = 4
 
                 if event.key == self.actions["right"]:
                     if self.newGame.direction != 4:
@@ -190,10 +194,6 @@ class MonsterKong(PyGameWrapper):
                         "up"] and self.newGame.Players[0].onLadder:
                     self.newGame.Players[0].updateWH(self.IMAGES["still"], "V",
                                                      -self.newGame.Players[0].getSpeed() / 2, 15, 15)
-                    if len(self.newGame.Players[0].checkCollision(self.ladderGroup)) == 0 or len(
-                            self.newGame.Players[0].checkCollision(self.wallGroup)) != 0:
-                        self.newGame.Players[0].updateWH(self.IMAGES["still"], "V",
-                                                         self.newGame.Players[0].getSpeed() / 2, 15, 15)
 
                 # If we are on a ladder, then we can move down
                 if event.key == self.actions[
@@ -228,3 +228,7 @@ class MonsterKong(PyGameWrapper):
         # Update all the monsters
         for enemy in self.newGame.Enemies:
             enemy.continuousUpdate(self.wallGroup, self.ladderGroup)
+
+        # Update score
+        score_text = self.score_font.render(f'Score: {int(self.getScore())}', True, (255, 255, 255))
+        self.screen.blit(score_text, (20, 10))

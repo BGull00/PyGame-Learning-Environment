@@ -35,8 +35,7 @@ class Paddle(pygame.sprite.Sprite):
             SCREEN_HEIGHT - height - 3)
 
     def update(self, dx, dt):
-        self.vel += dx
-        self.vel *= 0.9
+        self.vel = dx
 
         x, y = self.rect.center
         n_x = x + self.vel
@@ -139,9 +138,9 @@ class Catcher(base.PyGameWrapper):
         base.PyGameWrapper.__init__(self, width, height, actions=actions)
 
         self.fruit_size = percent_round_int(height, 0.06)
-        self.fruit_fall_speed = 0.00095 * height
+        self.fruit_fall_speed = 0.0003 * height
 
-        self.player_speed = 0.021 * width
+        self.player_speed = 0.02 * width
         self.paddle_width = percent_round_int(width, 0.2)
         self.paddle_height = percent_round_int(height, 0.04)
 
@@ -159,10 +158,10 @@ class Catcher(base.PyGameWrapper):
                 key = event.key
 
                 if key == self.actions['left']:
-                    self.dx -= self.player_speed
+                    self.dx = -self.player_speed
 
                 if key == self.actions['right']:
-                    self.dx += self.player_speed
+                    self.dx = self.player_speed
 
     def init(self):
         self.score = 0
@@ -175,6 +174,10 @@ class Catcher(base.PyGameWrapper):
                            self.width, self.height, self.rng)
 
         self.fruit.reset()
+
+        # Show score
+        pygame.font.init()
+        self.score_font = pygame.font.Font(None, 28)
 
     def getGameState(self):
         """
@@ -230,6 +233,10 @@ class Catcher(base.PyGameWrapper):
 
         self.player.draw(self.screen)
         self.fruit.draw(self.screen)
+
+        # Update score
+        score_text = self.score_font.render(f'Score: {int(self.getScore())}', True, (255, 255, 255))
+        self.screen.blit(score_text, (20, 10))
 
 if __name__ == "__main__":
     import numpy as np

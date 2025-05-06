@@ -334,6 +334,10 @@ class Pong(PyGameWrapper):
         self.ball_group = pygame.sprite.Group()
         self.ball_group.add(self.ball)
 
+        # Show score
+        pygame.font.init()
+        self.score_font = pygame.font.Font(None, 28)
+
 
     def reset(self):
         self.init()
@@ -393,6 +397,10 @@ class Pong(PyGameWrapper):
 
         self.players_group.draw(self.screen)
         self.ball_group.draw(self.screen)
+
+        # Update score
+        score_text = self.score_font.render(f'Score: {int(self.getScore())}', True, (255, 255, 255))
+        self.screen.blit(score_text, (20, 10))
 
 if __name__ == "__main__":
     import numpy as np

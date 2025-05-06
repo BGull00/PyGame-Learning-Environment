@@ -197,6 +197,10 @@ class WaterWorld(PyGameWrapper):
         self.ticks = 0
         self.lives = -1
 
+        # Show score
+        pygame.font.init()
+        self.score_font = pygame.font.Font(None, 28)
+
     def step(self, dt):
         """
             Perform one step of game emulation.
@@ -222,6 +226,10 @@ class WaterWorld(PyGameWrapper):
 
         self.player.draw(self.screen)
         self.creeps.draw(self.screen)
+
+        # Update score
+        score_text = self.score_font.render(f'Score: {int(self.getScore())}', True, (0, 0, 0))
+        self.screen.blit(score_text, (20, 10))
 
 if __name__ == "__main__":
     import numpy as np

@@ -184,21 +184,25 @@ class SnakePlayer():
         self.head.rect.center = (x, y)
 
     def grow(self):
-        self.length += 1
-        add = 100 if self.length % 2 == 0 else -100
-        color = (self.color[0] + add, self.color[1], self.color[2] + add)
-        last = self.body[-1].pos
+        d_length = 15
 
-        self.body.append(
-            SnakeSegment(
-                        (last.x, last.y),  # initially off screen?
-                self.width,
-                self.width,
-                color
+        self.length += d_length
+
+        for i in range(d_length):
+            add = 100 if self.length % 2 == 0 else -100
+            color = (self.color[0] + add, self.color[1], self.color[2] + add)
+            last = self.body[-1].pos
+
+            self.body.append(
+                SnakeSegment(
+                            (last.x, last.y),  # initially off screen?
+                    self.width,
+                    self.width,
+                    color
+                )
             )
-        )
-        if self.length > 3:  # we cant actually hit another segment until this point.
-            self.body_group.add(self.body[-1])
+            if self.length > 3:  # we cant actually hit another segment until this point.
+                self.body_group.add(self.body[-1])
 
     def draw(self, screen):
         for b in self.body[::-1]:
@@ -234,7 +238,7 @@ class Snake(PyGameWrapper):
 
         PyGameWrapper.__init__(self, width, height, actions=actions)
 
-        self.speed = percent_round_int(width, 0.45)
+        self.speed = percent_round_int(width, 0.2)
 
         self.player_width = percent_round_int(width, 0.05)
         self.food_width = percent_round_int(width, 0.09)
@@ -343,6 +347,10 @@ class Snake(PyGameWrapper):
         self.ticks = 0
         self.lives = 1
 
+        # Show score
+        pygame.font.init()
+        self.score_font = pygame.font.Font(None, 28)
+
     def step(self, dt):
         """
             Perform one step of game emulation.
@@ -386,6 +394,10 @@ class Snake(PyGameWrapper):
 
         self.player.draw(self.screen)
         self.food.draw(self.screen)
+
+        # Update score
+        score_text = self.score_font.render(f'Score: {int(self.getScore())}', True, (255, 255, 255))
+        self.screen.blit(score_text, (20, 10))
 
 
 if __name__ == "__main__":

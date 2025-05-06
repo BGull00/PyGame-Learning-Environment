@@ -114,7 +114,7 @@ class Board(object):
         if len(self.Fireballs) < len(self.Enemies) * 5:
             self.Fireballs.append(
                 Fireball(self.IMAGES["fireballright"], (location[0], location[1] + 15), len(self.Fireballs),
-                         2 + len(self.Enemies) / 2, self.rng, self._dir))
+                         2, self.rng, self._dir))
             # Starts monster's animation
             self.Enemies[monsterIndex].setStopDuration(15)
             self.Enemies[monsterIndex].setPosition(

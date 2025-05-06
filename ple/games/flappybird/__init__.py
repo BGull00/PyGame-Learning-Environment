@@ -296,6 +296,10 @@ class FlappyBird(base.PyGameWrapper):
         self.lives = 1
         self.game_tick = 0
 
+        # Show score
+        pygame.font.init()
+        self.score_font = pygame.font.Font(None, 28)
+
     def getGameState(self):
         """
         Gets a non-visual state representation of the game.
@@ -438,3 +442,7 @@ class FlappyBird(base.PyGameWrapper):
         self.pipe_group.draw(self.screen)
         self.backdrop.update_draw_base(self.screen, dt)
         self.player.draw(self.screen)
+
+        # Update score
+        score_text = self.score_font.render(f'Score: {int(self.getScore())}', True, (255, 255, 255))
+        self.screen.blit(score_text, (20, 10))
